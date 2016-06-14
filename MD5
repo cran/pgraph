@@ -1,0 +1,13 @@
+99ab948944e05886b5f52fcb66b0fbc6 *DESCRIPTION
+03faba597ecb7b94ce8712ae6a4d9843 *NAMESPACE
+5d89a285091ea54ae19ed675bc190215 *R/funs.R
+89d8c8664c02e64fb6dd055949bbe569 *R/greg.R
+5c52db9b67d836c9f45c15a294d63a6d *R/pgraph.R
+772e49c632febc61067dd8fc610b1dc8 *R/projcore.R
+627c9d01127cdfd1ffa5e844705168dd *R/projcov.R
+752908c2649791887f74f0d4e8841f7c *R/roc.R
+7b0da162cd6f7e6d14814d05dbeb4627 *man/greg.Rd
+688bc738fda5742cbbd4f330ae6d233c *man/pgraph.Rd
+7b17c3f394025a934422ccbdcda20068 *man/projcore.Rd
+6921d90ebfe5af0d858019793ea490c0 *man/projcov.Rd
+42a7eebd177b9f219314738f5ac8f782 *man/roc.Rd
