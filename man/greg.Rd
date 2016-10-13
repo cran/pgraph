@@ -2,7 +2,7 @@
 % Please edit documentation in R/greg.R
 \name{greg}
 \alias{greg}
-\title{Reguarlization graphical model estimation}
+\title{Regularized graphical model estimation}
 \usage{
 greg(z, A, eps = 1e-15, rholist = NULL, gamma = 0.5, trace = FALSE)
 }
@@ -26,9 +26,29 @@ a list.
 \item{roc.alasso}{roc results for adaptive lasso}
 }
 \description{
-\code{greg} calculate regularization graphical model
+\code{greg} calculate the regularized graphical model estimation using lasso, scad and adaptive lasso penalties. It report the results in the form of roc results for each method.
+}
+\examples{
+set.seed(0)
+p = 20;
+n = 300;
+tmp=runif(p-1,1,3)
+s=c(0,cumsum(tmp));
+s1=matrix(s,p,p)
+cov.mat.true=exp(-abs(s1-t(s1)))
+prec.mat.true=solve(cov.mat.true);
+a=matrix(rnorm(p*n),n,p)
+data.sa=a\%*\%chol(cov.mat.true);
+true.graph = outer(1:p,1:p,f<-function(x,y){(abs(x-y)==1)})
+greg.fit = greg(data.sa, true.graph)
+auc.lasso = sum(diff(greg.fit$roc.lasso[,1])*greg.fit$roc.lasso[-1,2])
+auc.alasso = sum(diff(greg.fit$roc.alasso[,1])*greg.fit$roc.alasso[-1,2])
+auc.scad = sum(diff(greg.fit$roc.scad[,1])*greg.fit$roc.scad[-1,2])
+auc.lasso
+auc.alasso
+auc.scad
 }
 \seealso{
-\code{\link{pgraph}}, \code{\link{roc}}, \code{\link{projcov}}, \code{\link{projcore}}
+\code{\link{pgraph}}, \code{\link{roc}}, \code{\link{projcov}}
 }
 

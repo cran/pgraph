@@ -1,9 +1,9 @@
-#' Reguarlization graphical model estimation
+#' Regularized graphical model estimation
 #'
-#' \code{greg} calculate regularization graphical model
+#' \code{greg} calculate the regularized graphical model estimation using lasso, scad and adaptive lasso penalties. It report the results in the form of roc results for each method.
 #'
 #' @export
-# @importFrom parallel mcmapply
+#' @importFrom parallel mcmapply
 #' @param z n * p dimensional matrix
 #' @param A p * p true graph
 #' @param eps a tolerence level for thresholding
@@ -14,7 +14,26 @@
 #' \item{roc.lasso}{roc results for lasso}
 #' \item{roc.scad}{roc results for scad}
 #' \item{roc.alasso}{roc results for adaptive lasso}
-#' @seealso \code{\link{pgraph}}, \code{\link{roc}}, \code{\link{projcov}}, \code{\link{projcore}}
+#' @seealso \code{\link{pgraph}}, \code{\link{roc}}, \code{\link{projcov}}
+#' @examples
+#' set.seed(0)
+#' p = 20;
+#' n = 300;
+#' tmp=runif(p-1,1,3)
+#' s=c(0,cumsum(tmp));
+#' s1=matrix(s,p,p)
+#' cov.mat.true=exp(-abs(s1-t(s1)))
+#' prec.mat.true=solve(cov.mat.true);
+#' a=matrix(rnorm(p*n),n,p)
+#' data.sa=a%*%chol(cov.mat.true);
+#' true.graph = outer(1:p,1:p,f<-function(x,y){(abs(x-y)==1)})
+#' greg.fit = greg(data.sa, true.graph)
+#' auc.lasso = sum(diff(greg.fit$roc.lasso[,1])*greg.fit$roc.lasso[-1,2])
+#' auc.alasso = sum(diff(greg.fit$roc.alasso[,1])*greg.fit$roc.alasso[-1,2])
+#' auc.scad = sum(diff(greg.fit$roc.scad[,1])*greg.fit$roc.scad[-1,2])
+#' auc.lasso
+#' auc.alasso
+#' auc.scad
 greg <- function(z, A, eps = 1e-15, rholist = NULL, gamma = 0.5, trace = FALSE){
  diag(A) = 0 ###true graph has diagonal 0
 # n = nrow(z)
@@ -27,7 +46,6 @@ greg <- function(z, A, eps = 1e-15, rholist = NULL, gamma = 0.5, trace = FALSE){
  n.rho = length(rholist)
  FP.lasso = FN.lasso = FP.alasso = FN.alasso = FP.scad = FN.scad = rep(0,n.rho)
  for (i in 1:n.rho) {
-  # if(i==6) browser()
    rho = rholist[i]
    fit.lasso = glasso::glasso(s, rho)
    wi.lasso = fit.lasso$wi

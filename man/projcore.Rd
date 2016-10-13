@@ -2,38 +2,32 @@
 % Please edit documentation in R/projcore.R
 \name{projcore}
 \alias{projcore}
-\title{Calculate the residual of a matrix projected on a factor matrix}
+\title{Calculate the Projected matrix given factors}
 \usage{
-projcore(x, b, method = c("lasso", "sam"))
+projcore(x, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE,
+  randSeed = 0)
 }
 \arguments{
-\item{x}{matrix}
+\item{x}{first vector}
 
 \item{b}{factor matrix}
 
 \item{method}{projection method. Default = 'linear'.}
+
+\item{one.SE}{whether to use the 1se rule for glmnet. Default = TRUE.}
+
+\item{refit}{whether to refit the selected model. Default = TRUE.}
+
+\item{randSeed}{the random seed for the program. Default = 0.}
 }
 \value{
-a residual matrix
-\item{resi}{a residual matrix}
+\item{eps}{the residual matrix after projection}
 }
 \description{
-\code{projcore} calculates the residual of a matrix projected on a factor matrix using a method
-specified.
-}
-\examples{
-library(splines)
-K = 3
-n = 100
-b = matrix(rnorm(K*n),n,K)
-bx = 1:3
-by = c(1,2,2)
-x = b\%*\%bx+rnorm(n)
-y = b\%*\%by+rnorm(n)
-fit1 = projcore(x, b, method = "lasso")
-fit2 = projcore(y, b, method = "sam")
+\code{projcore} calculate the projected matrix given
+factors.
 }
 \seealso{
-\code{\link{greg}}, \code{\link{roc}}, \code{\link{projcov}}, \code{\link{pgraph}}
+\code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}
 }
 

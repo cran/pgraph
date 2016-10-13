@@ -22,3 +22,4 @@ scadrightderv <- function(lamhat, a, lam)
 {
   pmax(lam*((lamhat<=lam)+pmax(a*lam-lamhat,0)*(lamhat>lam)/(a-1)/lam),1e-10)
 }
+

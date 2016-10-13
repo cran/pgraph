@@ -2,10 +2,10 @@
 % Please edit documentation in R/pgraph.R
 \name{pgraph}
 \alias{pgraph}
-\title{Compute the Projected Graph}
+\title{Calculate the Conditional Dependency Graph}
 \usage{
 pgraph(z, f = NULL, method = c("lasso", "sam"), cond = TRUE,
-  trace = FALSE)
+  randSeed = 0, trace = FALSE)
 }
 \arguments{
 \item{z}{n * p dimensional matrix}
@@ -17,18 +17,44 @@ pgraph(z, f = NULL, method = c("lasso", "sam"), cond = TRUE,
 \item{cond}{whether to create a conditional graph or unconditional graph.
 Default = TRUE. If cond = FALSE, f must be provided.}
 
+\item{randSeed}{the random seed for the program. Default = 0.}
+
 \item{trace}{whether to trace to estimation process.}
 }
 \value{
-a list.
-\item{test}{distance covariance test object}
-\item{xeps}{residual of the projection of x}
-\item{yeps}{residual of the projection of y}
+a list to be used to calculate the ROC curve.
+\item{statmat.pearson}{matrix with pearson correlation test}
+\item{statmat.dcov}{matrix with distance covariance test}
 }
 \description{
-\code{pgraph} calculate the projected graph
+\code{pgraph} calculate the conditional dependency graph (with/without external factors) via projection using lasso or sparse additive model.
+}
+\examples{
+library(splines)
+set.seed(0)
+p = 5;
+n = 100;
+tmp=runif(p-1,1,3)
+s=c(0,cumsum(tmp));
+s1=matrix(s,p,p)
+cov.mat.true=exp(-abs(s1-t(s1)))
+prec.mat.true=solve(cov.mat.true);
+a=matrix(rnorm(p*n),n,p)
+data.sa=a\%*\%chol(cov.mat.true);
+true.graph = outer(1:p,1:p,f<-function(x,y){(abs(x-y)==1)})
+methodlist = c("lasso","sam")
+fit = vector(mode="list", length=2)
+info = vector(mode="list", length=2)
+auc = NULL
+for(i in 1:2){
+method = methodlist[i]
+fit[[i]] = pgraph(data.sa, method = method)
+info[[i]] = roc(fit[[i]]$statmat.pearson, true.graph)
+auc[i] = sum(-diff(info[[i]][,1])*info[[i]][-1,2])
+  cat(method, ': auc=', auc[i],'\\n')
+}
 }
 \seealso{
-\code{\link{greg}}, \code{\link{roc}}, \code{\link{projcov}}, \code{\link{projcore}}
+\code{\link{greg}}, \code{\link{roc}}, \code{\link{projcov}}
 }
 

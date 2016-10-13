@@ -2,9 +2,10 @@
 % Please edit documentation in R/projcov.R
 \name{projcov}
 \alias{projcov}
-\title{Calculate the Projected covariance of two vectors}
+\title{Calculate the Projected Covariance of Two Vectors}
 \usage{
-projcov(x, y, b, method = c("lasso", "sam"))
+projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE,
+  randSeed = 0)
 }
 \arguments{
 \item{x}{first vector}
@@ -14,18 +15,38 @@ projcov(x, y, b, method = c("lasso", "sam"))
 \item{b}{factor matrix}
 
 \item{method}{projection method. Default = 'linear'.}
+
+\item{one.SE}{whether to use the 1se rule for glmnet. Default = TRUE.}
+
+\item{refit}{whether to refit the selected model. Default = TRUE.}
+
+\item{randSeed}{the random seed for the program. Default = 0.}
 }
 \value{
 a list.
-\item{test}{distance covariance test object}
-\item{xeps}{residual of the projection of x}
-\item{yeps}{residual of the projection of y}
+\item{test.pearson}{pearson correlection test statistic}
+\item{test.dcov}{distance covariance test statistic}
+\item{xeps}{residual of  projection of x on b}
+\item{yeps}{residual of  projection of y on b}
 }
 \description{
 \code{projcov} calculate the projected distance covariance of two vectors given
-factors.
+common factors.
+}
+\examples{
+library(splines)
+set.seed(0)
+K = 3
+n = 100
+b = matrix(rnorm(K*n),n,K)
+bx = 1:3
+by = c(1,2,2)
+x = b\%*\%bx+rnorm(n)
+y = b\%*\%by+rnorm(n)
+fit1 = projcov(x, y, b, method = "lasso")
+fit2 = projcov(x, y, b, method = "sam")
 }
 \seealso{
-\code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}, \code{\link{projcore}}
+\code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}
 }
 
