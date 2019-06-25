@@ -4,8 +4,8 @@
 \alias{projcore}
 \title{Calculate the Projected matrix given factors}
 \usage{
-projcore(x, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE,
-  randSeed = 0)
+projcore(x, b, method = c("lasso", "sam"), one.SE = TRUE,
+  refit = TRUE, randSeed = 0)
 }
 \arguments{
 \item{x}{first vector}
@@ -30,4 +30,3 @@ factors.
 \seealso{
 \code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}
 }
-

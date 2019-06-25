@@ -5,7 +5,7 @@
 \title{Calculate the Conditional Dependency Graph}
 \usage{
 pgraph(z, f = NULL, method = c("lasso", "sam"), cond = TRUE,
-  randSeed = 0, trace = FALSE)
+  R = 199, randSeed = 0, trace = FALSE)
 }
 \arguments{
 \item{z}{n * p dimensional matrix}
@@ -16,6 +16,8 @@ pgraph(z, f = NULL, method = c("lasso", "sam"), cond = TRUE,
 
 \item{cond}{whether to create a conditional graph or unconditional graph.
 Default = TRUE. If cond = FALSE, f must be provided.}
+
+\item{R}{number of random permutations for the test.}
 
 \item{randSeed}{the random seed for the program. Default = 0.}
 
@@ -42,9 +44,9 @@ prec.mat.true=solve(cov.mat.true);
 a=matrix(rnorm(p*n),n,p)
 data.sa=a\%*\%chol(cov.mat.true);
 true.graph = outer(1:p,1:p,f<-function(x,y){(abs(x-y)==1)})
-methodlist = c("lasso","sam")
-fit = vector(mode="list", length=2)
-info = vector(mode="list", length=2)
+methodlist = c('lasso','sam')
+fit = vector(mode='list', length=2)
+info = vector(mode='list', length=2)
 auc = NULL
 for(i in 1:2){
 method = methodlist[i]
@@ -57,4 +59,3 @@ auc[i] = sum(-diff(info[[i]][,1])*info[[i]][-1,2])
 \seealso{
 \code{\link{greg}}, \code{\link{roc}}, \code{\link{projcov}}
 }
-

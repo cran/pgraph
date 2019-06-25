@@ -19,7 +19,9 @@
 #' @param method projection method. Default = 'linear'.
 #' @param one.SE whether to use the 1se rule for glmnet. Default = TRUE.
 #' @param refit whether to refit the selected model. Default = TRUE.
+#' @param R number of random permutations for the test.
 #' @param randSeed the random seed for the program. Default = 0.
+#' @param normalized whether to normalized by S2. Default = FALSE.
 #' @return a list.
 #' \item{test.pearson}{pearson correlection test statistic}
 #' \item{test.dcov}{distance covariance test statistic}
@@ -36,16 +38,31 @@
 #' by = c(1,2,2)
 #' x = b%*%bx+rnorm(n)
 #' y = b%*%by+rnorm(n)
-#' fit1 = projcov(x, y, b, method = "lasso")
-#' fit2 = projcov(x, y, b, method = "sam")
-projcov <- function(x, y, b, method = c("lasso","sam"), one.SE = TRUE, refit = TRUE, randSeed = 0){
-  method = match.arg(method)
-  set.seed(randSeed)
-  xeps = projcore(x, b, method = method, one.SE = one.SE, refit = refit, randSeed = randSeed)
-  yeps = projcore(y, b, method = method, one.SE = one.SE, refit = refit, randSeed = randSeed)
+#' fit1 = projcov(x, y, b, method = 'lasso')
+#' fit2 = projcov(x, y, b, method = 'sam')
+projcov <- function(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE, R = 199, randSeed = 0, normalized = FALSE) {
+    method = match.arg(method)
+    set.seed(randSeed)
+    xeps = projcore(x, b, method = method, one.SE = one.SE, refit = refit, randSeed = randSeed)
+    yeps = projcore(y, b, method = method, one.SE = one.SE, refit = refit, randSeed = randSeed)
 
-  test.pearson = abs(cor(xeps,yeps))
-  test.dcov = energy::dcov.test(xeps,yeps)$statistic
+    test.pearson = abs(cor(xeps, yeps))
+    dcov.obj = energy::dcov.test(xeps, yeps, R = R)
+    test.dcov = 1 - dcov.obj$p.value
+    dcov.teststat = dcov.obj$estimate
 
-return(list=list(test.pearson = test.pearson, test.dcov = test.dcov, xeps=xeps,yeps=yeps))
+    if(normalized){
+     n = nrow(xeps)
+     S2matx = matrix(0,n,n)
+     S2maty = matrix(0,n,n)
+     for(i in 1:n)
+       for(j in 1:n){
+         S2matx[i,j]  = sqrt(sum((xeps[i,]-xeps[j,])^2))
+         S2maty[i,j]  = sqrt(sum((yeps[i,]-yeps[j,])^2))
+       }
+     S2 = mean(S2matx)*mean(S2maty)
+     dcov.teststat = dcov.teststat/S2
+    }
+
+    return(list = list(test.pearson = test.pearson, test.dcov = test.dcov, dcov.teststat=dcov.teststat, xeps = xeps, yeps = yeps))
 }

@@ -1,0 +1,3 @@
+#June 24, 2019:
+*Change the SCAD to one-step approximation
+*Use Lasso solution as the warm start.

@@ -19,4 +19,3 @@ a list.
 \description{
 \code{roc} calculate the fpr and tpr for the roc curve
 }
-

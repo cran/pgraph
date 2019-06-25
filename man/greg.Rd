@@ -51,4 +51,3 @@ auc.scad
 \seealso{
 \code{\link{pgraph}}, \code{\link{roc}}, \code{\link{projcov}}
 }
-

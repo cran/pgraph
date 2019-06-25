@@ -4,8 +4,8 @@
 \alias{projcov}
 \title{Calculate the Projected Covariance of Two Vectors}
 \usage{
-projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE,
-  randSeed = 0)
+projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE,
+  refit = TRUE, R = 199, randSeed = 0, normalized = FALSE)
 }
 \arguments{
 \item{x}{first vector}
@@ -20,7 +20,11 @@ projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE,
 
 \item{refit}{whether to refit the selected model. Default = TRUE.}
 
+\item{R}{number of random permutations for the test.}
+
 \item{randSeed}{the random seed for the program. Default = 0.}
+
+\item{normalized}{whether to normalized by S2. Default = FALSE.}
 }
 \value{
 a list.
@@ -43,10 +47,9 @@ bx = 1:3
 by = c(1,2,2)
 x = b\%*\%bx+rnorm(n)
 y = b\%*\%by+rnorm(n)
-fit1 = projcov(x, y, b, method = "lasso")
-fit2 = projcov(x, y, b, method = "sam")
+fit1 = projcov(x, y, b, method = 'lasso')
+fit2 = projcov(x, y, b, method = 'sam')
 }
 \seealso{
 \code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}
 }
-
