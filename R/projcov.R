@@ -16,7 +16,7 @@
 #' @param x first vector
 #' @param y second vector
 #' @param b factor matrix
-#' @param method projection method. Default = 'linear'.
+#' @param method projection method. Default = 'lasso'.
 #' @param one.SE whether to use the 1se rule for glmnet. Default = TRUE.
 #' @param refit whether to refit the selected model. Default = TRUE.
 #' @param R number of random permutations for the test.
@@ -40,7 +40,7 @@
 #' y = b%*%by+rnorm(n)
 #' fit1 = projcov(x, y, b, method = 'lasso')
 #' fit2 = projcov(x, y, b, method = 'sam')
-projcov <- function(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE, R = 199, randSeed = 0, normalized = FALSE) {
+projcov <- function(x, y, b, method = c("lasso", "sam", "ols"), one.SE = TRUE, refit = TRUE, R = 199, randSeed = 0, normalized = FALSE) {
     method = match.arg(method)
     set.seed(randSeed)
     xeps = projcore(x, b, method = method, one.SE = one.SE, refit = refit, randSeed = randSeed)
@@ -49,7 +49,7 @@ projcov <- function(x, y, b, method = c("lasso", "sam"), one.SE = TRUE, refit = 
     test.pearson = abs(cor(xeps, yeps))
     dcov.obj = energy::dcov.test(xeps, yeps, R = R)
     test.dcov = 1 - dcov.obj$p.value
-    dcov.teststat = dcov.obj$estimate
+    dcov.teststat = dcov.obj$statistic
 
     if(normalized){
      n = nrow(xeps)

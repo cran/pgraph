@@ -6,14 +6,14 @@
 #' @export
 #' @param x first vector
 #' @param b factor matrix
-#' @param method projection method. Default = 'linear'.
+#' @param method projection method. Default = 'lasso'.
 #' @param one.SE whether to use the 1se rule for glmnet. Default = TRUE.
 #' @param refit whether to refit the selected model. Default = TRUE.
 #' @param randSeed the random seed for the program. Default = 0.
 #' @return
 #' \item{eps}{the residual matrix after projection}
 #' @seealso \code{\link{greg}}, \code{\link{roc}}, \code{\link{pgraph}}
-projcore <- function(x, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TRUE, randSeed = 0) {
+projcore <- function(x, b, method = c("lasso", "sam", "ols"), one.SE = TRUE, refit = TRUE, randSeed = 0) {
     method = match.arg(method)
     # cor = match.arg(cor)
     set.seed(randSeed)
@@ -45,9 +45,13 @@ projcore <- function(x, b, method = c("lasso", "sam"), one.SE = TRUE, refit = TR
         } else if (method == "sam") {
             xfit = cv.samQL(b, x[, j])
             resi[, j] = x[, j] - predict(xfit$sam.fit, b)$values[, xfit$lambda.min]
+        } else if (method == "ols"){
+          #bi = cbind(1, b)
+          fit = lm.fit(as.matrix(b), x[, j])
+          resi[, j] = fit$residuals
         }
     }
-    
-    
+
+
     return(resi = resi)
 }

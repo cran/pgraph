@@ -4,15 +4,22 @@
 \alias{pgraph}
 \title{Calculate the Conditional Dependency Graph}
 \usage{
-pgraph(z, f = NULL, method = c("lasso", "sam"), cond = TRUE,
-  R = 199, randSeed = 0, trace = FALSE)
+pgraph(
+  z,
+  f = NULL,
+  method = c("lasso", "sam", "ols"),
+  cond = TRUE,
+  R = 199,
+  randSeed = 0,
+  trace = FALSE
+)
 }
 \arguments{
 \item{z}{n * p dimensional matrix}
 
 \item{f}{n * q factor matrix. Default = 'NULL'.}
 
-\item{method}{projection method. Default = 'linear'.}
+\item{method}{projection method. Default = 'lasso'.}
 
 \item{cond}{whether to create a conditional graph or unconditional graph.
 Default = TRUE. If cond = FALSE, f must be provided.}
@@ -53,7 +60,7 @@ method = methodlist[i]
 fit[[i]] = pgraph(data.sa, method = method)
 info[[i]] = roc(fit[[i]]$statmat.pearson, true.graph)
 auc[i] = sum(-diff(info[[i]][,1])*info[[i]][-1,2])
-  cat(method, ': auc=', auc[i],'\\n')
+  cat(method, ': auc=', auc[i],'\n')
 }
 }
 \seealso{

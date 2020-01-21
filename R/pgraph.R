@@ -6,7 +6,7 @@
 # @importFrom parallel mcmapply
 #' @param z n * p dimensional matrix
 #' @param f n * q factor matrix. Default = 'NULL'.
-#' @param method projection method. Default = 'linear'.
+#' @param method projection method. Default = 'lasso'.
 #' @param cond whether to create a conditional graph or unconditional graph.
 #' Default = TRUE. If cond = FALSE, f must be provided.
 #' @param R number of random permutations for the test.
@@ -40,7 +40,7 @@
 #' auc[i] = sum(-diff(info[[i]][,1])*info[[i]][-1,2])
 #'   cat(method, ': auc=', auc[i],'\n')
 #' }
-pgraph <- function(z, f = NULL, method = c("lasso", "sam"), cond = TRUE, R = 199, randSeed = 0,
+pgraph <- function(z, f = NULL, method = c("lasso", "sam", "ols"), cond = TRUE, R = 199, randSeed = 0,
     trace = FALSE) {
     method = match.arg(method)
     set.seed(randSeed)

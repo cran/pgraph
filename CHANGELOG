@@ -1,3 +1,6 @@
+#June 27, 2019:
+*Added least square as an option
+
 #June 24, 2019:
 *Change the SCAD to one-step approximation
 *Use Lasso solution as the warm start.

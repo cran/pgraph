@@ -4,8 +4,17 @@
 \alias{projcov}
 \title{Calculate the Projected Covariance of Two Vectors}
 \usage{
-projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE,
-  refit = TRUE, R = 199, randSeed = 0, normalized = FALSE)
+projcov(
+  x,
+  y,
+  b,
+  method = c("lasso", "sam", "ols"),
+  one.SE = TRUE,
+  refit = TRUE,
+  R = 199,
+  randSeed = 0,
+  normalized = FALSE
+)
 }
 \arguments{
 \item{x}{first vector}
@@ -14,7 +23,7 @@ projcov(x, y, b, method = c("lasso", "sam"), one.SE = TRUE,
 
 \item{b}{factor matrix}
 
-\item{method}{projection method. Default = 'linear'.}
+\item{method}{projection method. Default = 'lasso'.}
 
 \item{one.SE}{whether to use the 1se rule for glmnet. Default = TRUE.}
 

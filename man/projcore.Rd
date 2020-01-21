@@ -4,15 +4,21 @@
 \alias{projcore}
 \title{Calculate the Projected matrix given factors}
 \usage{
-projcore(x, b, method = c("lasso", "sam"), one.SE = TRUE,
-  refit = TRUE, randSeed = 0)
+projcore(
+  x,
+  b,
+  method = c("lasso", "sam", "ols"),
+  one.SE = TRUE,
+  refit = TRUE,
+  randSeed = 0
+)
 }
 \arguments{
 \item{x}{first vector}
 
 \item{b}{factor matrix}
 
-\item{method}{projection method. Default = 'linear'.}
+\item{method}{projection method. Default = 'lasso'.}
 
 \item{one.SE}{whether to use the 1se rule for glmnet. Default = TRUE.}
 
